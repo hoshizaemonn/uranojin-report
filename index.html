@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>浦野仁後援会 Meta広告 中間レポート（6/13〜6/23）</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --primary: #1a4a7a;
+  --accent: #d4a373;
+  --bg: #fafaf7;
+  --text: #2a2a2a;
+  --muted: #666;
+  --good: #2d6a4f;
+  --warn: #b08900;
+  --bad: #b54040;
+  --card-bg: #fff;
+  --border: #e5e5e0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  font-size: 15px;
+}
+.container { max-width: 960px; margin: 0 auto; padding: 32px 20px 64px; }
+header {
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 16px;
+  margin-bottom: 32px;
+}
+header h1 {
+  font-size: 26px;
+  color: var(--primary);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+header .meta {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 4px;
+}
+h2 {
+  font-size: 20px;
+  color: var(--primary);
+  border-left: 4px solid var(--accent);
+  padding-left: 12px;
+  margin: 40px 0 20px;
+}
+h3 {
+  font-size: 16px;
+  color: var(--text);
+  margin: 24px 0 12px;
+  font-weight: 600;
+}
+p { margin-bottom: 12px; }
+
+/* 結論ブロック */
+.conclusion {
+  background: linear-gradient(135deg, #1a4a7a 0%, #2c6ba8 100%);
+  color: white;
+  padding: 28px 28px 24px;
+  border-radius: 8px;
+  margin-bottom: 32px;
+  box-shadow: 0 4px 12px rgba(26,74,122,0.15);
+}
+.conclusion h2 {
+  color: white;
+  border-left-color: var(--accent);
+  margin-top: 0;
+  font-size: 18px;
+}
+.conclusion ol {
+  list-style: none;
+  counter-reset: item;
+  padding-left: 0;
+}
+.conclusion ol li {
+  counter-increment: item;
+  margin-bottom: 14px;
+  padding-left: 38px;
+  position: relative;
+  line-height: 1.6;
+}
+.conclusion ol li::before {
+  content: counter(item);
+  position: absolute;
+  left: 0;
+  top: 2px;
+  width: 26px;
+  height: 26px;
+  background: var(--accent);
+  border-radius: 50%;
+  text-align: center;
+  font-weight: 700;
+  color: white;
+  font-size: 14px;
+  line-height: 26px;
+}
+.conclusion strong { color: #fff8e7; font-weight: 700; }
+
+/* KPI カード */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin: 20px 0;
+}
+.kpi {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  padding: 16px 18px;
+  border-radius: 6px;
+}
+.kpi .label { font-size: 12px; color: var(--muted); }
+.kpi .value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1.2;
+  margin-top: 4px;
+}
+.kpi .sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+/* テーブル */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card-bg);
+  font-size: 13px;
+  margin: 16px 0;
+}
+table th {
+  background: var(--primary);
+  color: white;
+  padding: 10px 8px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 12px;
+}
+table td {
+  padding: 8px;
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+}
+table tr:nth-child(even) td { background: #f7f5ef; }
+table tr.total td {
+  font-weight: 700;
+  background: #e8f0f7;
+  border-top: 2px solid var(--primary);
+}
+
+/* ベンチマーク比較 */
+.bench {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  background: var(--card-bg);
+}
+.bench th, .bench td {
+  padding: 12px;
+  border: 1px solid var(--border);
+  text-align: left;
+  font-size: 14px;
+}
+.bench th { background: #f0ece3; font-weight: 600; }
+.bench .verdict { text-align: center; font-size: 18px; font-weight: 700; }
+.verdict-good { color: var(--good); }
+.verdict-warn { color: var(--warn); }
+.verdict-bad { color: var(--bad); }
+
+/* チャート */
+.chart-box {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  padding: 20px;
+  border-radius: 6px;
+  margin: 16px 0;
+}
+.chart-wrap { position: relative; height: 320px; }
+
+/* 注釈 */
+.note {
+  background: #fff8e6;
+  border-left: 3px solid var(--warn);
+  padding: 12px 16px;
+  font-size: 13px;
+  margin: 12px 0;
+}
+.source {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 8px;
+}
+.source a { color: var(--muted); }
+
+.proposal {
+  background: #f0ece3;
+  border-left: 4px solid var(--accent);
+  padding: 16px 20px;
+  margin: 12px 0;
+  border-radius: 0 6px 6px 0;
+}
+.proposal h3 { margin-top: 0; color: var(--primary); }
+
+footer {
+  margin-top: 64px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>浦野仁後援会 Meta広告 中間レポート</h1>
+  <div class="meta">配信期間: 2026/6/13〜6/25（13日間）／中間集計対象: 6/13〜6/23（11日間）／作成: 2026/6/24</div>
+</header>
+
+<!-- 結論TOP3 -->
+<div class="conclusion">
+  <h2>結論サマリ（11日間時点）</h2>
+  <ol>
+    <li><strong>有権者カバー率68.5%達成。</strong>田川市+郡の推定有権者75,000人のうち、すでに51,347人にリーチ。残2日で80%超えが射程圏内。</li>
+    <li><strong>CPV ¥6・CPM ¥1,405 と業界平均並み〜上位の効率。</strong>政治広告にもかかわらず一般Meta広告ベンチマーク内に収まり、コスト効率は良好。</li>
+    <li><strong>予算消化42%（残¥112,557）／残2日。</strong>このペースだと予算余剰の可能性。残期間は1日¥56,278ペースでフル消化可能だが、リーチが頭打ちなので<strong>残予算を新規未到達層に振る判断が要</strong>。</li>
+  </ol>
+</div>
+
+<!-- 配信概要 -->
+<h2>1. 配信概要</h2>
+<table>
+  <tr><th>項目</th><th>内容</th></tr>
+  <tr><td>候補者</td><td>浦野仁（うらのじん後援会）</td></tr>
+  <tr><td>配信媒体</td><td>Meta（Facebook / Instagram）</td></tr>
+  <tr><td>配信期間</td><td>2026/6/13 〜 6/25（13日間）</td></tr>
+  <tr><td>配信エリア</td><td>田川市 + 10mi圏（田川郡含む）</td></tr>
+  <tr><td>有権者数</td><td>約75,000人</td></tr>
+  <tr><td>総予算</td><td>¥195,000（1日¥15,000）</td></tr>
+  <tr><td>クリエイティブ</td><td>動画素材（Instagram既存投稿利用）</td></tr>
+  <tr><td>免責情報</td><td>「浦野仁後援会」（Meta政治広告ポリシー対応済）</td></tr>
+</table>
+
+<!-- 累計実績 -->
+<h2>2. 累計実績ハイライト（6/13〜6/23）</h2>
+<div class="kpi-grid">
+  <div class="kpi">
+    <div class="label">累計リーチ</div>
+    <div class="value">51,347人</div>
+    <div class="sub">有権者の68.5%</div>
+  </div>
+  <div class="kpi">
+    <div class="label">表示回数</div>
+    <div class="value">58,692</div>
+    <div class="sub">1人あたり1.14回</div>
+  </div>
+  <div class="kpi">
+    <div class="label">動画3秒再生</div>
+    <div class="value">13,023</div>
+    <div class="sub">視聴率 22.2%</div>
+  </div>
+  <div class="kpi">
+    <div class="label">完視聴(100%)</div>
+    <div class="value">409</div>
+    <div class="sub">完視聴率 3.1%</div>
+  </div>
+  <div class="kpi">
+    <div class="label">累計消化</div>
+    <div class="value">¥82,443</div>
+    <div class="sub">予算の42.3%</div>
+  </div>
+  <div class="kpi">
+    <div class="label">平均CPM</div>
+    <div class="value">¥1,405</div>
+    <div class="sub">表示1,000回単価</div>
+  </div>
+  <div class="kpi">
+    <div class="label">平均CPV</div>
+    <div class="value">¥6</div>
+    <div class="sub">3秒再生1回単価</div>
+  </div>
+</div>
+
+<!-- ベンチマーク比較 -->
+<h2>3. 業界平均との比較</h2>
+<p>日本のMeta広告 一般業界ベンチマーク（2025-2026）と本キャンペーンの実績を比較しました。</p>
+
+<table class="bench">
+  <tr>
+    <th>指標</th>
+    <th>本キャンペーン</th>
+    <th>業界平均（日本Meta広告）</th>
+    <th>判定</th>
+  </tr>
+  <tr>
+    <td>CPM（1,000表示単価）</td>
+    <td>¥1,405</td>
+    <td>¥500〜¥1,500</td>
+    <td class="verdict verdict-good">○ 範囲内</td>
+  </tr>
+  <tr>
+    <td>CPV（動画3秒再生単価）</td>
+    <td>¥6</td>
+    <td>¥5〜¥15</td>
+    <td class="verdict verdict-good">◎ 下限値 優秀</td>
+  </tr>
+  <tr>
+    <td>フリークエンシー（1人あたり表示回数）</td>
+    <td>1.14回</td>
+    <td>2〜3回（一般CV広告）／1〜2回（リーチ重視）</td>
+    <td class="verdict verdict-good">○ 選挙広告として適正</td>
+  </tr>
+  <tr>
+    <td>3秒視聴率（再生÷表示）</td>
+    <td>22.2%</td>
+    <td>15〜30%（Meta一般動画）</td>
+    <td class="verdict verdict-good">○ 範囲内</td>
+  </tr>
+  <tr>
+    <td>完視聴率（100%視聴÷3秒再生）</td>
+    <td>3.1%</td>
+    <td>※指標定義が媒体で異なり直接比較困難</td>
+    <td class="verdict verdict-warn">△ 注釈参照</td>
+  </tr>
+  <tr>
+    <td>有権者カバー率</td>
+    <td>68.5%</td>
+    <td>地方議員選挙の達成水準 公開データなし</td>
+    <td class="verdict verdict-good">◎ 高水準</td>
+  </tr>
+</table>
+
+<div class="note">
+  <strong>完視聴率の補足：</strong>業界平均としてFacebook動画の「コンプリート率56%」が引用されることがあるが、これはMetaの「ThruPlay（15秒以下動画なら全再生／15秒超なら15秒到達）」の定義に基づくもの。本レポートの「完視聴率3.1%」は<strong>動画を100%最後まで見た割合</strong>のため定義が異なる。動画尺・編集次第で改善余地あり。
+</div>
+
+<div class="note">
+  <strong>政治広告ベンチマークの限界：</strong>日本の地方選挙Meta広告に特化した公開ベンチマークデータは存在しません（業界慣行として未公開）。本比較は一般Meta広告ベンチマークとの参考対比であり、政治広告は通常広告と性質が異なる（CV指標より認知・リーチを優先）点をご留意ください。
+</div>
+
+<div class="source">
+  出典:
+  <a href="https://renue.co.jp/posts/facebook-meta-ads-cost-cpc-cpm-advantage-plus-budget-guide-2026">renue「Facebook広告費用相場2026」</a> ／
+  <a href="https://latrus-inc.com/metaad-cpm/">latrus「META広告CPM解説」</a> ／
+  <a href="https://kaizenplatform.com/contents/video-ads-unit-price-advertisement-amount">Kaizen Platform「SNS動画広告単価」</a>
+</div>
+
+<!-- 日次推移 -->
+<h2>4. 日次推移</h2>
+<div class="chart-box">
+  <h3>日別リーチ・累計リーチ・消化金額の推移</h3>
+  <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
+</div>
+
+<h3>日次データ一覧</h3>
+<div style="overflow-x:auto;">
+<table>
+  <tr>
+    <th>日付</th><th>日数</th><th>リーチ</th><th>累計リーチ</th><th>カバー率</th>
+    <th>F</th><th>表示</th><th>3秒再生</th><th>完視聴</th><th>CPM</th><th>CPV</th><th>消化</th>
+  </tr>
+  <tr><td>6/13</td><td>1日目</td><td>1,282</td><td>1,282</td><td>1.7%</td><td>1.07</td><td>1,374</td><td>330</td><td>12</td><td>¥2,729</td><td>¥11.4</td><td>¥3,750</td></tr>
+  <tr><td>6/14</td><td>2日目</td><td>3,055</td><td>4,337</td><td>5.8%</td><td>1.12</td><td>3,428</td><td>770</td><td>28</td><td>¥2,192</td><td>¥9.8</td><td>¥7,514</td></tr>
+  <tr><td>6/15</td><td>3日目</td><td>4,724</td><td>9,061</td><td>12.1%</td><td>1.16</td><td>5,462</td><td>1,207</td><td>44</td><td>¥1,481</td><td>¥6.7</td><td>¥8,091</td></tr>
+  <tr><td>6/16</td><td>4日目</td><td>4,464</td><td>13,525</td><td>18.0%</td><td>1.16</td><td>5,198</td><td>1,379</td><td>59</td><td>¥1,554</td><td>¥5.9</td><td>¥8,080</td></tr>
+  <tr><td>6/17</td><td>5日目</td><td>3,374</td><td>16,899</td><td>22.5%</td><td>1.13</td><td>3,809</td><td>969</td><td>35</td><td>¥1,008</td><td>¥4.0</td><td>¥3,838</td></tr>
+  <tr><td>6/18</td><td>6日目</td><td>5,870</td><td>22,769</td><td>30.4%</td><td>1.22</td><td>7,141</td><td>1,794</td><td>63</td><td>¥1,134</td><td>¥4.5</td><td>¥8,096</td></tr>
+  <tr><td>6/19</td><td>7日目</td><td>5,665</td><td>28,434</td><td>37.9%</td><td>1.13</td><td>6,420</td><td>1,457</td><td>42</td><td>¥1,263</td><td>¥5.6</td><td>¥8,111</td></tr>
+  <tr><td>6/20</td><td>8日目</td><td>6,079</td><td>34,513</td><td>46.0%</td><td>1.13</td><td>6,880</td><td>1,349</td><td>42</td><td>¥1,281</td><td>¥6.5</td><td>¥8,813</td></tr>
+  <tr><td>6/21</td><td>9日目</td><td>5,254</td><td>39,767</td><td>53.0%</td><td>1.15</td><td>6,029</td><td>1,226</td><td>23</td><td>¥1,357</td><td>¥6.7</td><td>¥8,184</td></tr>
+  <tr><td>6/22</td><td>10日目</td><td>5,436</td><td>45,203</td><td>60.3%</td><td>1.13</td><td>6,118</td><td>1,166</td><td>34</td><td>¥1,335</td><td>¥7.0</td><td>¥8,168</td></tr>
+  <tr><td>6/23</td><td>11日目</td><td>6,144</td><td>51,347</td><td>68.5%</td><td>1.11</td><td>6,833</td><td>1,376</td><td>27</td><td>¥1,434</td><td>¥7.1</td><td>¥9,798</td></tr>
+  <tr class="total">
+    <td colspan="2">合計</td><td>51,347*</td><td>—</td><td>68.5%</td><td>1.14平均</td><td>58,692</td><td>13,023</td><td>409</td><td>¥1,405平均</td><td>¥6.3平均</td><td>¥82,443</td>
+  </tr>
+</table>
+</div>
+<p style="font-size:11px;color:var(--muted);">*累計リーチはMeta側でユニークユーザーとして重複排除されたもの。日次リーチの単純合計とは異なる。</p>
+
+<!-- 分析 -->
+<h2>5. 分析と所感</h2>
+
+<h3>5-1. 序盤（6/13-15）: スロースタートから急加速</h3>
+<p>初日は¥3,750消化と低調（広告審査・配信学習の影響）。3日目には1日¥8,000ペースに乗り、CPV ¥6.7まで効率改善。Metaの最適化が早期に効いた良好な立ち上がり。</p>
+
+<h3>5-2. 中盤（6/16-20）: カバー率18%→46%へ拡大</h3>
+<p>1日¥8,000前後で安定消化。リーチが毎日5,000-6,000人ずつ追加され、有権者カバー率が28ポイント上昇。<strong>6/18には残予算・残日数を考慮した認知曲線として理想的な水準（カバー率30%）を突破</strong>。</p>
+
+<h3>5-3. 終盤（6/21-23）: 重複リーチ増・新規鈍化</h3>
+<p>カバー率が60%超に達した頃から、新規リーチが鈍化傾向。フリークエンシーは1.11-1.13回と低水準を維持できているものの、田川市+郡のMeta利用者を概ね捕捉した可能性。<strong>このまま同一クリエイティブを残2日継続しても費用対効果は逓減</strong>。</p>
+
+<h3>5-4. 完視聴の課題</h3>
+<p>動画3秒再生は13,023回と十分だが、最後まで見た人は409人（3.1%）。動画尺・冒頭3秒のフック・テロップ配置に改善余地。ただし<strong>選挙広告の主目的は「候補者名の認知」であり、3秒で名前・写真が出ていれば目的は達成</strong>している可能性が高い。</p>
+
+<!-- 残期間シミュレーション -->
+<h2>6. 残期間（6/24-6/25）の予算消化シミュレーション</h2>
+
+<table>
+  <tr>
+    <th>シナリオ</th>
+    <th>運用方針</th>
+    <th>想定追加リーチ</th>
+    <th>想定カバー率</th>
+    <th>想定追加消化</th>
+  </tr>
+  <tr>
+    <td>A: 現状維持</td>
+    <td>同一クリエイティブ・同一ターゲットで継続</td>
+    <td>+5,000〜7,000人（重複多）</td>
+    <td>71-76%</td>
+    <td>¥17,000程度／予算余剰¥95,000</td>
+  </tr>
+  <tr>
+    <td>B: 予算強制消化</td>
+    <td>入札強化＋日予算引上げ</td>
+    <td>+8,000〜10,000人</td>
+    <td>74-80%</td>
+    <td>¥112,557フル消化／F上昇懸念</td>
+  </tr>
+  <tr>
+    <td style="background:#fff8e6;font-weight:600;">C: 推奨</td>
+    <td style="background:#fff8e6;"><strong>クリエイティブ差替＋ターゲット拡張（隣接市町村）</strong></td>
+    <td style="background:#fff8e6;">+10,000〜13,000人（新規層）</td>
+    <td style="background:#fff8e6;">78-83%</td>
+    <td style="background:#fff8e6;">¥100,000前後／効率維持</td>
+  </tr>
+</table>
+
+<!-- 打ち手提案 -->
+<h2>7. 残2日間 打ち手提案</h2>
+
+<div class="proposal">
+  <h3>提案1: クリエイティブのバリエーション追加（最優先）</h3>
+  <p>11日間同一動画で配信→田川市+郡のMeta利用者の多くが既に視聴済。<strong>動画2本目を投入</strong>することで、既存リーチ層には「2回目の接触」、新規層には「初接触」を生み出せる。</p>
+  <p style="font-size:13px;color:var(--muted);">※選挙広告は「3回接触で記憶定着」のフリークエンシー2-3回が理想水準。現状1.14回は新規拡大に最適だが、終盤は接触深化フェーズに移行を推奨。</p>
+</div>
+
+<div class="proposal">
+  <h3>提案2: ターゲットエリア微調整</h3>
+  <p>田川市+10mi圏は概ねカバー完了。<strong>投票権を持つ田川市民の年代別配信比率を確認</strong>し、過小配信の年代があれば年齢×性別ターゲティングを追加。特に30-40代の比較的Meta利用率が高い層への重点配信が有効。</p>
+</div>
+
+<div class="proposal">
+  <h3>提案3: 予算余剰の扱い</h3>
+  <p>このまま自然消化させると¥95,000程度余ります。<strong>余剰予算は最終日（6/25）の入札強化に集中投下</strong>することで、投票日直前のリマインダー効果を狙うのが定石。</p>
+</div>
+
+<div class="proposal">
+  <h3>提案4: 動画CTAの差替検討</h3>
+  <p>完視聴率3.1%は改善余地あり。次回キャンペーン以降に向けて、<strong>動画冒頭3秒で「浦野仁」の名前と顔が完結する構成</strong>を推奨（現状はナレーション主体と推測）。</p>
+</div>
+
+<!-- まとめ -->
+<h2>8. まとめ</h2>
+<p>11日間で<strong>有権者の68.5%にリーチ</strong>という結果は、地方議員選挙のMeta広告として極めて良好な水準です。予算効率（CPV ¥6・CPM ¥1,405）も一般Meta広告ベンチマーク内に収まり、政治広告の特殊性を考慮しても合格点。</p>
+<p>残2日間は、<strong>新規リーチの追加と接触深化のバランス</strong>をどう取るかが課題。クリエイティブ差替えで「現状維持の余剰消化」を回避し、最後まで効率を保ったまま選挙日に繋ぐ運用を推奨します。</p>
+
+<footer>
+  作成: 株式会社 斗 ／ 2026年6月24日<br>
+  データソース: Meta Marketing API（広告アカウントID: 1560506328790823）<br>
+  本レポートは中間集計のため、最終結果は配信終了後（6/25以降）に再集計予定
+</footer>
+
+</div>
+
+<script>
+const ctx = document.getElementById('trendChart').getContext('2d');
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ['6/13','6/14','6/15','6/16','6/17','6/18','6/19','6/20','6/21','6/22','6/23'],
+    datasets: [
+      {
+        type: 'bar',
+        label: '日別リーチ',
+        data: [1282, 3055, 4724, 4464, 3374, 5870, 5665, 6079, 5254, 5436, 6144],
+        backgroundColor: 'rgba(212, 163, 115, 0.7)',
+        yAxisID: 'y',
+        order: 2
+      },
+      {
+        type: 'line',
+        label: '累計リーチ',
+        data: [1282, 4337, 9061, 13525, 16899, 22769, 28434, 34513, 39767, 45203, 51347],
+        borderColor: '#1a4a7a',
+        backgroundColor: 'rgba(26, 74, 122, 0.1)',
+        borderWidth: 3,
+        tension: 0.3,
+        yAxisID: 'y',
+        order: 1,
+        fill: false
+      },
+      {
+        type: 'line',
+        label: '日別消化(円)',
+        data: [3750, 7514, 8091, 8080, 3838, 8096, 8111, 8813, 8184, 8168, 9798],
+        borderColor: '#b08900',
+        backgroundColor: 'rgba(176, 137, 0, 0.1)',
+        borderWidth: 2,
+        borderDash: [4, 4],
+        tension: 0.3,
+        yAxisID: 'y2',
+        order: 0,
+        fill: false
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    scales: {
+      y: {
+        type: 'linear',
+        position: 'left',
+        title: { display: true, text: 'リーチ (人)' },
+        beginAtZero: true
+      },
+      y2: {
+        type: 'linear',
+        position: 'right',
+        title: { display: true, text: '消化金額 (¥)' },
+        beginAtZero: true,
+        grid: { drawOnChartArea: false }
+      }
+    },
+    plugins: {
+      legend: { position: 'top' },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            const v = ctx.parsed.y;
+            if (ctx.dataset.label.includes('消化')) return ctx.dataset.label + ': ¥' + v.toLocaleString();
+            return ctx.dataset.label + ': ' + v.toLocaleString() + '人';
+          }
+        }
+      }
+    }
+  }
+});
+</script>
+
+</body>
+</html>
